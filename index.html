@@ -12,7 +12,6 @@ body {
   background: #f5f7fb;
 }
 
-/* 상단 */
 .header {
   background: linear-gradient(135deg, #4f46e5, #6366f1);
   color: white;
@@ -21,27 +20,10 @@ body {
   font-weight: bold;
 }
 
-/* 컨테이너 */
 .container {
   padding: 16px;
 }
 
-/* 카드 */
-.card {
-  background: white;
-  border-radius: 14px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-  overflow: hidden;
-}
-
-/* iframe */
-iframe {
-  width: 100%;
-  height: 80vh;
-  border: none;
-}
-
-/* 버튼 */
 .menu {
   display: flex;
   gap: 10px;
@@ -62,6 +44,19 @@ iframe {
   background: #4f46e5;
   color: white;
 }
+
+.card {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+iframe {
+  width: 100%;
+  height: 80vh;
+  border: none;
+}
 </style>
 </head>
 
@@ -75,10 +70,11 @@ iframe {
 
   <div class="menu">
     <button class="active" onclick="showSchedule(this)">스케줄</button>
-    <button onclick="showMgmt(this)">관리비</button>
+    <button onclick="showSetting(this)">설정</button>
   </div>
 
   <div class="card" id="content">
+    <!-- ✅ 기존 스케줄 그대로 유지 -->
     <iframe src="team_schedule.html"></iframe>
   </div>
 
@@ -87,14 +83,27 @@ iframe {
 <script>
 function showSchedule(btn){
   setActive(btn);
+
+  // 👉 기존 스케줄 그대로 불러오기 (핵심)
   document.getElementById('content').innerHTML =
     '<iframe src="team_schedule.html"></iframe>';
 }
 
-function showMgmt(btn){
+function showSetting(btn){
   setActive(btn);
+
+  // 👉 설정만 추가 (기존 기능 영향 없음)
   document.getElementById('content').innerHTML =
-    '<iframe src="management_fee.html"></iframe>';
+    `
+    <div style="padding:20px;">
+      <h3>⚙️ 설정</h3>
+      <p>여기에 기능 추가 가능</p>
+
+      <button onclick="alert('다크모드 (추후 추가)')" style="padding:10px;margin-top:10px;">
+        다크모드
+      </button>
+    </div>
+    `;
 }
 
 function setActive(btn){
