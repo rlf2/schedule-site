@@ -8,96 +8,37 @@
 <style>
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   background: #f5f7fb;
 }
 
-/* 상단 바 */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
-  color: white;
-  padding: 16px;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-/* 설정 버튼 */
-.setting-btn {
-  font-size: 18px;
-  cursor: pointer;
-}
-
-/* 컨테이너 */
+/* 여백만 살짝 */
 .container {
-  padding: 12px;
+  padding: 10px;
 }
 
-/* 카드 */
+/* 카드 느낌 */
 .card {
   background: white;
-  border-radius: 14px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  border-radius: 10px;
   overflow: hidden;
 }
 
-/* iframe */
+/* 스케줄 */
 iframe {
   width: 100%;
-  height: 85vh;
+  height: 100vh;
   border: none;
-}
-
-/* 설정 패널 */
-.setting-panel {
-  position: fixed;
-  top: 0;
-  right: -300px;
-  width: 260px;
-  height: 100%;
-  background: white;
-  box-shadow: -3px 0 10px rgba(0,0,0,0.1);
-  padding: 20px;
-  transition: 0.3s;
-}
-
-.setting-panel.open {
-  right: 0;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">
-  📅 팀 스케줄
-  <div class="setting-btn" onclick="toggleSetting()">⚙️</div>
-</div>
-
 <div class="container">
   <div class="card">
     <iframe src="team_schedule.html"></iframe>
   </div>
 </div>
-
-<!-- 설정 패널 -->
-<div id="settingPanel" class="setting-panel">
-  <h3>⚙️ 설정</h3>
-  <p>여기에 기능 추가 가능</p>
-
-  <button onclick="alert('다크모드 예정')" style="padding:10px;margin-top:10px;">
-    다크모드
-  </button>
-</div>
-
-<script>
-function toggleSetting(){
-  const panel = document.getElementById('settingPanel');
-  panel.classList.toggle('open');
-}
-</script>
 
 </body>
 </html>
