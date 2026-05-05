@@ -1,24 +1,107 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>스케줄</title>
-  <style>
-    html, body {
-      margin: 0;
-      height: 100%;
-    }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>팀 스케줄</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f5f7fb;
+}
+
+/* 상단 */
+.header {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: white;
+  padding: 16px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* 컨테이너 */
+.container {
+  padding: 16px;
+}
+
+/* 카드 */
+.card {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+/* iframe */
+iframe {
+  width: 100%;
+  height: 80vh;
+  border: none;
+}
+
+/* 버튼 */
+.menu {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.menu button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background: #e5e7eb;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.menu button.active {
+  background: #4f46e5;
+  color: white;
+}
+</style>
 </head>
+
 <body>
 
-<iframe src="team_schedule.html"></iframe>
+<div class="header">
+  📅 팀 스케줄
+</div>
+
+<div class="container">
+
+  <div class="menu">
+    <button class="active" onclick="showSchedule(this)">스케줄</button>
+    <button onclick="showMgmt(this)">관리비</button>
+  </div>
+
+  <div class="card" id="content">
+    <iframe src="team_schedule.html"></iframe>
+  </div>
+
+</div>
+
+<script>
+function showSchedule(btn){
+  setActive(btn);
+  document.getElementById('content').innerHTML =
+    '<iframe src="team_schedule.html"></iframe>';
+}
+
+function showMgmt(btn){
+  setActive(btn);
+  document.getElementById('content').innerHTML =
+    '<iframe src="management_fee.html"></iframe>';
+}
+
+function setActive(btn){
+  document.querySelectorAll('.menu button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
 
 </body>
 </html>
