@@ -16,6 +16,12 @@
 [data-theme="dark"]{--d9b:#1e3a6e;--eb:#5b1235;--mb:#14452f;--offb:#1e2330;--spb:#4a2e04;--rdb:#064e35;--jnb:#5b1235;--sob:#1e3a6e;--jyb:#4a2e04;}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,'Pretendard',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;user-select:none;-webkit-user-select:none;}
+  /* 오늘 날짜 표시 (기존 색 유지 + 테두리만 강조) */
+.today {
+  background: transparent !important;
+  border: 2px solid #4f46e5 !important;
+  border-radius: 6px;
+}
 
 /* LOGIN */
 .ls{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:500}
