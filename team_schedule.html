@@ -30,18 +30,19 @@ body{font-family:-apple-system,'Pretendard',sans-serif;background:var(--bg);colo
 tr[style*="--hl"] td {
   background: inherit !important;
 }
-
-/* 대신 테두리로 강조 */
+/* 오늘 행 색 완전 제거 */
 tr[style*="--hl"] td {
-  position: relative;
+  background-color: transparent !important;
 }
 
-tr[style*="--hl"] td::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border: 2px solid #4f46e5;
-  pointer-events: none;
+/* 기존 근무 색 다시 살리기 (핵심) */
+td[class] {
+  background-color: unset !important;
+}
+
+/* 오늘 강조는 테두리로만 */
+tr[style*="--hl"] td {
+  border: 2px solid #4f46e5 !important;
 }
 
 /* LOGIN */
