@@ -22,6 +22,20 @@ body{font-family:-apple-system,'Pretendard',sans-serif;background:var(--bg);colo
   border: 2px solid #4f46e5 !important;
   border-radius: 6px;
 }
+  /* 오늘 날짜 강조 (색 유지 + 테두리만) */
+.today {
+  position: relative;
+}
+
+/* 테두리를 가짜로 위에 씌움 */
+.today::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid #4f46e5;
+  border-radius: 6px;
+  pointer-events: none;
+}
 
 /* LOGIN */
 .ls{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:500}
