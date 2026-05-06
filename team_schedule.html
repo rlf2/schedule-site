@@ -26,14 +26,21 @@ body{font-family:-apple-system,'Pretendard',sans-serif;background:var(--bg);colo
 .today {
   position: relative;
 }
+/* 오늘 행 색 덮어쓰기 제거 */
+tr[style*="--hl"] td {
+  background: inherit !important;
+}
 
-/* 테두리를 가짜로 위에 씌움 */
-.today::after {
+/* 대신 테두리로 강조 */
+tr[style*="--hl"] td {
+  position: relative;
+}
+
+tr[style*="--hl"] td::after {
   content: "";
   position: absolute;
   inset: 0;
   border: 2px solid #4f46e5;
-  border-radius: 6px;
   pointer-events: none;
 }
 
