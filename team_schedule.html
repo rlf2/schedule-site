@@ -574,64 +574,41 @@ function renderVoteBanner(){
 
 
 
-function resetMyVote(){
+function resetMyVote(){localStorage.removeItem('ts_myvote_'+VT);renderVote();}
 
-  localStorage.removeItem('ts_myvote_'+VT);
+function addCL(a){const n=new Date();const t=`${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;CL.unshift({t,a});if(CL.length>50)CL.pop();localStorage.setItem('ts_cl',JSON.stringify(CL));renderCL();}
+function renderCL(){const el=document.getElementById('CLL');if(!el)return;el.innerHTML=CL.length?CL.map(c=>`<div class="cli"><span class="clt">${c.t}</span> ${c.a}</div>`).join(''):'<div style="font-size:10px;color:var(--dim)">변경 없음</div>';}
 
-  renderVote();
-  renderVoteResult();
+function renderMBL(){document.getElementById('MBL').innerHTML=MBS.map((m,i)=>`<div class="mr" id="MR${i}"><div class="md" style="background:${m.c}"></div><span class="mn">${m.n}</span></div>`).join('');}
+function editMN(i){const el=document.getElementById('MR'+i);el.innerHTML=`<div class="md" style="background:${MBS[i].c}"></div><input class="mei" id="ME${i}" value="${MBS[i].n}" maxlength="12" onkeydown="if(event.key==='Enter')saveMN(${i});if(event.key==='Escape')renderMBL()"><button class="ib" onclick="saveMN(${i})">✅</button><button class="ib" onclick="renderMBL()">✖</button>`;document.getElementById('ME'+i).focus();}
+function saveMN(i){const v=document.getElementById('ME'+i)?.value.trim();if(!v)return;MBS[i].n=v;localStorage.setItem('ts_mbs',JSON.stringify(MBS.map(m=>m.n)));renderMBL();renderCV();toast('✅ 이름 저장됨');}
+
+function openBDModal(){
+  document.getElementById('MR').innerHTML=`<div class="mb2" onclick="bgC(event)"><div class="mo">
+    <div class="mona">🎂 생일 관리</div>
+    <div style="font-size:12px;color:var(--sub);margin-bottom:12px">생일을 등록하면 달력에 표시돼요 (MM-DD 형식)</div>
+    ${MBS.map((m,i)=>`<div class="bdrow"><div class="md" style="background:${m.c}"></div><div class="mn">${m.n}</div><input class="bdi" type="text" placeholder="MM-DD" id="BD${i}" value="${BDS[m.n]||''}" maxlength="5"></div>`).join('')}
+    <div class="br"><button class="bn" onclick="closeM()">취소</button><button class="bn pr" onclick="saveBD()">저장</button></div>
+  </div></div>`;
 }
-  function renderVoteResult(){
+async function saveBD(){MBS.forEach((m,i)=>{const v=document.getElementById('BD'+i)?.value.trim();if(v)BDS[m.n]=v;else delete BDS[m.n];});localStorage.setItem('ts_bd',JSON.stringify(BDS));await saveSett('birthdays',JSON.stringify(BDS));closeM();renderCV();toast('🎂 생일 저장됨');}
+function getBD(m,d){const mm=`${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;return MBS.filter(mb=>BDS[mb.n]===mm).map(mb=>mb.n);}
 
-  const box = document.getElementById('voteResult');
+function renderFCH(){const el=document.getElementById('FCH');if(!el)return;el.innerHTML=MBS.map(m=>`<div class="fc${AF.has(m.n)?' on':''}" onclick="togF('${m.n}')" style="${AF.has(m.n)?'border-color:'+m.c+';color:'+m.c:''}">${m.n}</div>`).join('');}
+function togF(n){if(AF.has(n))AF.delete(n);else AF.add(n);renderFCH();renderCV();}
 
-  if(!box) return;
+function renderSFB(){const C={D9:'var(--d9)',E:'var(--e)',M:'var(--m)',OFF:'var(--off)',SPECIAL:'var(--sp)'};const B={D9:'var(--d9b)',E:'var(--eb)',M:'var(--mb)',OFF:'var(--offb)',SPECIAL:'var(--spb)'};document.getElementById('SFB').innerHTML=SHS.map(s=>`<div class="sk" style="background:${B[s.code]}"><span style="color:${C[s.code]};font-size:11px;font-weight:700">${s.code==='OFF'?'#':s.code==='SPECIAL'?'특수':s.code}</span><span style="font-size:10px;color:var(--sub);margin-left:2px">${s.time}</span></div>`).join('');}
 
-  let result = {};
+function selDT(t){DT=DT===t?null:t;document.querySelectorAll('.dtbn').forEach(b=>b.className='dtbn'+(DT===b.dataset.t?' a'+b.dataset.t:''));}
 
-  Object.keys(localStorage).forEach(key=>{
-
-    if(key.startsWith('ts_myvote_')){
-
-      const v = localStorage.getItem(key);
-
-      if(v){
-        result[v]=(result[v]||0)+1;
-      }
-    }
-  });
-
-  let html = '<div style="padding:12px;background:#f5f5f5;border-radius:10px;">';
-  html += '<h3 style="margin-bottom:10px;">실시간 투표 결과</h3>';
-
-  if(Object.keys(result).length===0){
-
-    html += '투표 없음';
-
-  }else{
-
-    Object.entries(result)
-      .sort((a,b)=>b[1]-a[1])
-      .forEach(([name,count])=>{
-
-        html += `
-          <div style="
-            display:flex;
-            justify-content:space-between;
-            padding:6px 0;
-            border-bottom:1px solid #ddd;
-          ">
-            <span>${name}</span>
-            <strong>${count}표</strong>
-          </div>
-        `;
-      });
-  }
-
-  html += '</div>';
-
-  box.innerHTML = html;
+async function loadMonth(){
+  const{y,m}=CUR;setSync('loading');
+  const{data,err}=await sb.from('schedules').select('*').gte('date',dk(y,m,1)).lte('date',dk(y,m+1,0));
+  if(err){setSync('err');return;}
+  CA={};(data||[]).forEach(r=>{CA[ck(r.date,r.member)]={type:r.type,special:r.special,note:r.note};});
+  setSync('ok');setLS();renderCV();renderSMC();
 }
+function getS(mb,date){return CA[ck(date,mb)]||null;}
 
 // CONSECUTIVE CHECK
 function chkCons(mb,date,nt){
@@ -1457,7 +1434,6 @@ function resetVote() {
 // 페이지 로드시 결과 갱신
 window.addEventListener('load', () => {
   updateVoteResult();
-  renderVoteResult();
 });
   </script>
   <div class="vote-admin" style="margin:20px 0;">
@@ -1466,6 +1442,6 @@ window.addEventListener('load', () => {
   <button onclick="resetVote()">초기화</button>
 </div>
 
-<div id="voteResult" style="margin:20px 0;"
+<div id="voteResult" style="display:none;margin-top:10px;"></div>
 </body>
 </html>
